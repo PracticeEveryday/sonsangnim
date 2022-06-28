@@ -109,8 +109,9 @@ def prediction(result):
     model = build_model()
     sequenceList = []
     for i in range(len(result)-30):
-        sequence = result_to_sequence(result[i:i+30])
-        sequenceList.append(sequence)
+        if i % 2 == 0:
+            sequence = result_to_sequence(result[i:i+30])
+            sequenceList.append(sequence)
 
     actions = choose_action()
 

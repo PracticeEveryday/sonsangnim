@@ -3,29 +3,12 @@ from flask import Flask
 from flask_cors import CORS
 
 from model_load_total import prediction
-
-from mock60 import test_data
+from model_load_total import HandSignModel
 
 app = Flask(__name__)
 CORS(app)
 app.config['SECRET_KEY'] = 'secret!'
 socket = SocketIO(app, cors_allowed_origins='*', logger=False, engineio_logger=True)
-
-# prediction generator
-class HandSignModel:
-    def __init__(self, mode):
-        # self.delay = 0.5
-        # super(ModelPrediction, self).__init__()
-        self.mode = mode
-
-    def predict(self, data):
-        print('start prediction')
-        return prediction(data)
-
-    def run(self, data):
-        result = self.predict(data)
-        return result
-
 
 # Handle the webapp 
 
@@ -49,4 +32,4 @@ def disconnect_socket(payload):
 
 
 if __name__ == '__main__':
-    socket.run(app, port = 4000, )
+    socket.run(app, port = 4000)

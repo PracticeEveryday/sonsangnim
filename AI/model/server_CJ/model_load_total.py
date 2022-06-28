@@ -1,6 +1,4 @@
 import numpy as np
-import tensorflow
-import os
 from scipy.stats import rankdata
 from collections import Counter
 
@@ -10,6 +8,8 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Input
 from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint
 from tensorflow.keras.optimizers import Adam
+
+
 
 
 # Actions that we try to detect
@@ -139,3 +139,19 @@ def prediction(result):
     end = time()
     print('총 걸리는 시간: ' , afterPredict-start, end-start)
     return top3_alphabet
+
+
+# prediction generator
+class HandSignModel:
+    def __init__(self, mode):
+        # self.delay = 0.5
+        self.mode = mode
+
+    def predict(self, data):
+        print('start prediction')
+        
+        return prediction(data)
+
+    def run(self, data):
+        result = self.predict(data)
+        return result

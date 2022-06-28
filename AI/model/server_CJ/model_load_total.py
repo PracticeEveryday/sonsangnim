@@ -4,6 +4,8 @@ import os
 from scipy.stats import rankdata
 from collections import Counter
 
+from time import time
+
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Input
 from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint
@@ -63,18 +65,22 @@ def top_n(n, array):
 
 
 def extract_keypoints(results):
+    """
+    pose(33), left_hand(21), right_hand(21) 의 모든 인덱스를 flatten하는 함수
+    ( => 33 * 4 + 21 * 3 + 21 * 3 = 258 )
+    :param results:
+    :return numpy array (shape=(1, 258)):
+    """
     try:
-        poses = results['poseLandmarks']
-    except:
-        poses = [{"x": 0, "y": 0, "z": 0, "visibility": 0} for res in range(33)]
-    try:
-        lhs = results['leftHandLandmarks']
-    except:
-        lhs = [{"x": 0, "y": 0, "z": 0} for res in range(21)]
-    try:
-        rhs = results['rightHandLandmarks']
-    except:
-        rhs = [{"x": 0, "y": 0, "z": 0} for res in range(21)]
+        poses = [{"x": 0, "y": 0, "z": 0, "visibility": 0} for res in range(33)] \
+            if 'poseLandmarks' not in results else results['poseLandmarks']
+        lhs = [{"x": 0, "y": 0, "z": 0} for res in range(21)] \
+            if 'leftHandLandmarks' not in results else results['leftHandLandmarks']
+        rhs = [{"x": 0, "y": 0, "z": 0} for res in range(21)] \
+            if 'rightHandLandmarks' not in results else results['rightHandLandmarks']
+    except Exception as e:
+        print(e)
+        return
     pose = np.array([[res['x'], res['y'], res['z'], res['visibility']] for res in poses]).flatten()
     lh = np.array([[res['x'], res['y'], res['z']] for res in lhs]).flatten()
     rh = np.array([[res['x'], res['y'], res['z']] for res in rhs]).flatten()
@@ -94,7 +100,7 @@ def result_to_sequence(result):
     for num in range(SEQ_LENGTH):
         keypoint = extract_keypoints(result[num])
         input_sequences.append(keypoint)
-    # print(input_sequences)
+
     return input_sequences
 
 
@@ -107,9 +113,10 @@ def prediction(result):
     :return top3_alphabet:
     '''
     model = build_model()
+    start = time()
     sequenceList = []
     for i in range(len(result)-30):
-        if i % 2 == 0:
+        if i % 4 == 0:
             sequence = result_to_sequence(result[i:i+30])
             sequenceList.append(sequence)
 
@@ -119,7 +126,7 @@ def prediction(result):
     for seq in sequenceList:
         res = model.predict(np.expand_dims(seq, axis=0))[0]
         resList.append(res)
-    
+    afterPredict = time()
     # 최상위 3개 알파벳/단어
     predictedList = []
 
@@ -129,5 +136,6 @@ def prediction(result):
     predictedCounter = Counter(predictedList)
     sortedPredictedList = [i[0] for i in predictedCounter.most_common(n=3)]
     top3_alphabet = [actions[i] for i in sortedPredictedList[0:3]]
-
+    end = time()
+    print('총 걸리는 시간: ' , afterPredict-start, end-start)
     return top3_alphabet

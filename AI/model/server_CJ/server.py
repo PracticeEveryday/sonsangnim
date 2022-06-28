@@ -4,6 +4,8 @@ from flask_cors import CORS
 
 from model_load_total import prediction
 
+from mock60 import test_data
+
 app = Flask(__name__)
 CORS(app)
 app.config['SECRET_KEY'] = 'secret!'
@@ -36,7 +38,7 @@ def connect_socket():
 def handle_coordinate(data):
     print('coordinate', data)
     model = HandSignModel()
-    result = model.run(data)
+    result = model.run(test_data)
     emit("answer", result)
 
 

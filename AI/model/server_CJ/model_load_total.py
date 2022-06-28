@@ -16,6 +16,7 @@ def choose_action():
              "internet", "jump", "key", "love", "music", "name",
              "open", "paper", "rabbit", "school", "tiger", "video", "walk"]
     total = alphabet + words
+    print('total: ', total)
     return total
 
 

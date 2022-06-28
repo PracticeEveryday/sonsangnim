@@ -37,8 +37,8 @@ def connect_socket():
 @socket.on('coordinate')
 def handle_coordinate(data):
     print('coordinate', data)
-    model = HandSignModel()
-    result = model.run(test_data)
+    model = HandSignModel(mode='A')
+    result = model.run(data)
     emit("answer", result)
 
 

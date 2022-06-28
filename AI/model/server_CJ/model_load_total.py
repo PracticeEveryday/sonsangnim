@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow
 import os
 from scipy.stats import rankdata
+from collections import Counter
 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Input
@@ -11,13 +12,16 @@ from tensorflow.keras.optimizers import Adam
 
 # Actions that we try to detect
 def choose_action():
+    '''
+    알파벳, 단어 통합 array 반환
+    '''
     alphabet = [chr(ord('a') + i) for i in range(26)]
     words = ["angel", "banana", "cry", "dance", "egg", "fun", "game", "house",
              "internet", "jump", "key", "love", "music", "name",
              "open", "paper", "rabbit", "school", "tiger", "video", "walk"]
     total = alphabet + words
-    print('total: ', total)
-    return total
+
+    return np.array(total)
 
 
 # load model by folder name
@@ -26,8 +30,7 @@ def build_model():
     alphabet / word 모델 다르게 사용할 경우 mode 설정
     :return model:
     '''
-    print("모델 쌓는 중")
-   
+
     actions = choose_action()
     model = Sequential()
     model.add(LSTM(64, return_sequences=True, activation='relu', input_shape=(30,258)))
@@ -117,10 +120,13 @@ def prediction(result):
         resList.append(res)
     
     # 최상위 3개 알파벳/단어
-    top3List = []
+    predictedList = []
+
     for top3 in resList:
-        predict_top3_idx = top_n(3, top3)
-        top3List.append(predict_top3_idx)
-    
-    top3_alphabet = [actions[i] for i in predict_top3_idx]
+        predictedList += top_n(3, top3)
+
+    predictedCounter = Counter(predictedList)
+    sortedPredictedList = [i[0] for i in predictedCounter.most_common(n=3)]
+    top3_alphabet = [actions[i] for i in sortedPredictedList[0:3]]
+
     return top3_alphabet

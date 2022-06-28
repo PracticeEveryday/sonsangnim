@@ -9,7 +9,7 @@ from mock60 import test_data
 app = Flask(__name__)
 CORS(app)
 app.config['SECRET_KEY'] = 'secret!'
-socket = SocketIO(app, cors_allowed_origins='*', engineio_logger=True)
+socket = SocketIO(app, cors_allowed_origins='*', logger=False, engineio_logger=True)
 
 # prediction generator
 class HandSignModel:
@@ -36,7 +36,7 @@ def connect_socket():
 
 @socket.on('coordinate')
 def handle_coordinate(data):
-    print('coordinate', data)
+    # print('coordinate', data)
     model = HandSignModel(mode='A')
     result = model.run(data)
     emit("answer", result)
@@ -49,4 +49,4 @@ def disconnect_socket(payload):
 
 
 if __name__ == '__main__':
-    socket.run(app, port = 4000)
+    socket.run(app, port = 4000, )

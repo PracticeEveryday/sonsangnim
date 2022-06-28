@@ -112,8 +112,8 @@ def prediction(result):
     :param mode:
     :return top3_alphabet:
     '''
-    model = build_model()
     start = time()
+    model = build_model()
     sequenceList = []
     for i in range(len(result)-30):
         if i % 4 == 0:

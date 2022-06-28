@@ -13,6 +13,8 @@ def choose_action(mode):
         "angel", "banana", "cry", "dance", "egg", "fun", "game", "house",
         "internet", "jump", "key", "love", "music", "name",
         "open", "paper", "rabbit", "school", "tiger", "video", "walk"])
+    # action = alphabet + words
+    # 통합 모델 사용시 수정
     return alphabet if mode == "A" else words
 
 
@@ -30,9 +32,9 @@ def build_model(mode, actions):
     model.add(tf.keras.layers.Dense(64, activation='relu'))
     model.add(tf.keras.layers.Dense(32, activation='relu'))
     model.add(tf.keras.layers.Dense(actions.shape[0], activation='softmax'))
-    model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
 
     weight = 'action_hs_8.h5' if mode == 'A' else 'action_hs_word_1.h5'
+    # weight 은 통합 가중치로 수정
     base_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(base_dir, 'weights', weight)
     model.load_weights(file_path)

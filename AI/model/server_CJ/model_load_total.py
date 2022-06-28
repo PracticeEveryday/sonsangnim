@@ -102,52 +102,51 @@ def result_to_sequence(result):
 
     return input_sequences
 
-
-def prediction(result):
-    '''
-    예측 메인 함수
-    model build, 입력 데이터 input 형태로 변환, 유사한 알파벳 idx 뽑아서 반환
-    :param result:
-    :param mode:
-    :return top3_alphabet:
-    '''
-    start = time()
-    model = build_model()
-    sequenceList = []
-    for i in range(len(result)-30):
-        if i % 4 == 0:
-            sequence = result_to_sequence(result[i:i+30])
-            sequenceList.append(sequence)
-
-    actions = choose_action()
-
-    resList = []
-    for seq in sequenceList:
-        res = model.predict(np.expand_dims(seq, axis=0))[0]
-        resList.append(res)
-    afterPredict = time()
-
-    # 최상위 3개 알파벳/단어
-    predictedList = []
-
-    for top3 in resList:
-        predictedList += top_n(3, top3)
-
-    predictedCounter = Counter(predictedList)
-    sortedPredictedList = [i[0] for i in predictedCounter.most_common(n=3)]
-    top3_alphabet = [actions[i] for i in sortedPredictedList[0:3]]
-    end = time()
-    print('총 걸리는 시간: ' , afterPredict-start, end-start)
-    return top3_alphabet
-
-
 # prediction generator
 class HandSignModel:
-    def __init__(self, mode):
-        self.mode = mode
+    def __init__(self):
         self.actions = choose_action()
-        self.model = build_model(self.mode, self.actions)
+        self.model = build_model()
 
-    def predict(self, data):
-        print('start prediction')
-        return prediction(data)
+    def predict(self, result):
+
+        '''
+        예측 메인 함수
+        model build, 입력 데이터 input 형태로 변환, 유사한 알파벳 idx 뽑아서 반환
+        :param result:
+        :param mode:
+        :return top3_alphabet:
+        '''
+        # 모델 쌓고 나서 prediction 시작
+        start = time()
+
+        # 프론트에서 넘어온 시퀀스 30개씩 정리
+        sequenceList = []
+        for i in range(len(result)-30):
+            # 50개 중 인덱스가 4로 나뉘어지는 것만으로 자르기(20//4=5개 검사)
+            if i % 4 == 0:
+                sequence = result_to_sequence(result[i:i+30])
+                sequenceList.append(sequence)
+
+        # 시퀀스 별로 나온 예측값 넣기
+        resList = []
+        for seq in sequenceList:
+            res = self.model.predict(np.expand_dims(seq, axis=0))[0]
+            resList.append(res)
+
+        afterPredict = time()
+
+        # 최상위 3개 알파벳/단어
+        predictedList = []
+        for top3 in resList:
+            predictedList += top_n(3, top3)
+
+        # 5개의 예측값 리스트 중 최빈값 뽑기
+        predictedCounter = Counter(predictedList)
+        sortedPredictedList = [i[0] for i in predictedCounter.most_common(n=3)]
+        top3_alphabet = [self.actions[i] for i in sortedPredictedList[0:3]]
+        
+        end = time()
+        print('총 걸리는 시간: ' , afterPredict-start, end-start)
+        
+        return top3_alphabet

@@ -60,7 +60,6 @@ def top_n(n, array):
     length = len(array)
     for i in range(length, length-n, -1):
         top_n_idx.append(np.where(ranks == i)[0][0])
-    print("top_n_idx: ", top_n_idx)
     return top_n_idx
 
 
@@ -127,6 +126,7 @@ def prediction(result):
         res = model.predict(np.expand_dims(seq, axis=0))[0]
         resList.append(res)
     afterPredict = time()
+
     # 최상위 3개 알파벳/단어
     predictedList = []
 
@@ -144,14 +144,10 @@ def prediction(result):
 # prediction generator
 class HandSignModel:
     def __init__(self, mode):
-        # self.delay = 0.5
         self.mode = mode
+        self.actions = choose_action()
+        self.model = build_model(self.mode, self.actions)
 
     def predict(self, data):
         print('start prediction')
-        
         return prediction(data)
-
-    def run(self, data):
-        result = self.predict(data)
-        return result

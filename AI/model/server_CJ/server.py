@@ -2,7 +2,6 @@ from flask_socketio import SocketIO, emit, disconnect
 from flask import Flask
 from flask_cors import CORS
 
-from model_load_total import prediction
 from model_load_total import HandSignModel
 
 app = Flask(__name__)
@@ -21,7 +20,7 @@ def connect_socket():
 def handle_coordinate(data):
     # print('coordinate', data)
     model = HandSignModel(mode='A')
-    result = model.run(data)
+    result = model.predict(data)
     emit("answer", result)
 
 

@@ -20,7 +20,7 @@ def connect_socket():
 
 @socket.on('coordinate')
 def handle_coordinate(data):
-    model = HandSignModel('A')
+    model = HandSignModel()
     result = model.predict(data)
     emit("answer", result)
 

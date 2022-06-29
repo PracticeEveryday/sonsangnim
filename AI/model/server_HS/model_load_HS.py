@@ -2,22 +2,23 @@ import os
 import numpy as np
 import tensorflow as tf
 from scipy.stats import rankdata
+from time import time
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
 # Actions that we try to detect
-def choose_action(mode):
-    alphabet = np.array([chr(ord('a') + i) for i in range(26)])
-    words = np.array([
+def choose_action():
+    alphabet = [chr(ord('a') + i) for i in range(26)]
+    words = [
         "angel", "banana", "cry", "dance", "egg", "fun", "game", "house",
         "internet", "jump", "key", "love", "music", "name",
-        "open", "paper", "rabbit", "school", "tiger", "video", "walk"])
-    return alphabet if mode == "A" else words
+        "open", "paper", "rabbit", "school", "tiger", "video", "walk"]
+    return np.array(alphabet + words)
 
 
 # load model by folder name
-def build_model(mode, actions):
+def build_model(actions):
     """
     alphabet / word 모델 다르게 사용할 경우 mode 설정
     issue - saved_model은 _UserObject 형식으로 반환되기 때문에 h5로 가중치만 불러오는 방법 사용
@@ -32,7 +33,8 @@ def build_model(mode, actions):
     model.add(tf.keras.layers.Dense(actions.shape[0], activation='softmax'))
     model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
 
-    weight = 'action_hs_8.h5' if mode == 'A' else 'action_hs_word_1.h5'
+    # weight = 'action_hs_8.h5' if mode == 'A' else 'action_hs_word_1.h5'
+    weight = 'action_total_CJ_0626_06.h5'
     base_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(base_dir, 'weights', weight)
     model.load_weights(file_path)
@@ -96,10 +98,10 @@ def result_to_sequence(data):
 
 
 class HandSignModel:
-    def __init__(self, mode):
-        self.mode = mode
-        self.actions = choose_action(mode)
-        self.model = build_model(self.mode, self.actions)
+    def __init__(self):
+        # self.mode = mode
+        self.actions = choose_action()
+        self.model = build_model(self.actions)
 
     def predict(self, data):
         """
@@ -108,9 +110,14 @@ class HandSignModel:
         :param data:
         :return top3_result:
         """
+
+        start = time()
         sequence = result_to_sequence(data)
         res = self.model.predict(np.expand_dims(sequence, axis=0))[0]
         # 최상위 3개 결과
         predict_top3_idx = top_n(3, res)
         top3_result = [self.actions[i] for i in predict_top3_idx]
+        end = time()
+
+        print("걸린 시간:", end - start)
         return top3_result

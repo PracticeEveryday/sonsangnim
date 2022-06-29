@@ -25,10 +25,10 @@ def handle_coordinate(data):
 
 
 @socket.on("disconnect")
-def disconnect_socket(payload):
+def disconnect_socket():
     emit("disconnect", "ok")
     disconnect()
 
 
 if __name__ == '__main__':
-    socket.run(app, port = 4000)
+    socket.run(app, port=4000)

@@ -122,11 +122,10 @@ class HandSignModel:
 
         # 프론트에서 넘어온 시퀀스 30개씩 정리
         sequenceList = []
-        for i in range(len(result)-30):
+        for i in range(0, len(result)-30, 4):
             # 50개 중 인덱스가 4로 나뉘어지는 것만으로 자르기(20//4=5개 검사)
-            if i % 4 == 0:
-                sequence = result_to_sequence(result[i:i+30])
-                sequenceList.append(sequence)
+            sequence = result_to_sequence(result[i:i+30])
+            sequenceList.append(sequence)
 
         # 시퀀스 별로 나온 예측값 넣기
         resList = []

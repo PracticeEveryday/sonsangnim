@@ -2,6 +2,7 @@ import numpy as np
 from scipy.stats import rankdata
 from collections import Counter
 
+import os
 from time import time
 
 from tensorflow.keras.models import Sequential
@@ -43,7 +44,11 @@ def build_model():
     model.add(Dense(actions.shape[0], activation='softmax'))
     model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
     
-    model.load_weights('action_total_CJ_0626_06.h5')
+    weight = 'action_total_CJ_0626_06.h5'
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(base_dir, 'weights', weight)
+
+    model.load_weights(file_path)
 
     return model
 

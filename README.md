@@ -1,6 +1,6 @@
 # 영어 알파벳 수화 학습 사이트, 손생님🤙
 
-![android-chrome-512x512](/uploads/89ec7acee833e95b7b9995a407d1fc16/android-chrome-512x512.png)
+![image](https://user-images.githubusercontent.com/97580759/177196410-16d81061-2bc4-4328-8f73-ffdb0ad12aa8.png)
 
 > 배포 도메인: http://kdt-ai4-team05.elicecoding.com/
 
@@ -143,13 +143,13 @@ Hand pose estimation을 통한 영어 알파벳 수화 학습 사이트
 
 > mediapipe는 구글의 머신러닝 오픈소스 프레임워크로, face, hand, pose 등 여러 인식과 관련된 작업을 처리할 수 있습니다. 수화를 인식할 수 있는 서비스를 만들기 위해 손의 움직임을 탐지하는 부분은 mediapipe를 활용했습니다. 해당 움직임이 맞는 수화인지 인식하는 부분은 프로젝트 중 인공지능 모델로 구축하였습니다. <br> [참고]([google의 mediapipe](https://google.github.io/mediapipe/solutions/hands#python-solution-api) )
 
-![기술스택](/uploads/55d9dcdf6e0af57482ec0df24eda0f15/기술스택.png)
+![image](https://user-images.githubusercontent.com/97580759/177196475-3d5a4935-bc06-4dd3-9a63-26b7a42a765d.png)
 
 ## 4. 시스템 아키텍쳐
 
 ### 4-1) 개발 구조
 
-![image](/uploads/31770b539ae8ca2a115b33351b8bcaec/image.png)
+![image](https://user-images.githubusercontent.com/97580759/177196504-e0b7babb-3fbe-4a63-ab98-91490cfaafc0.png)
 
 ## 5. 프로젝트 팀원 소개
 
@@ -157,7 +157,7 @@ Hand pose estimation을 통한 영어 알파벳 수화 학습 사이트
 | ------ | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 박보선 | 프론트엔드           | 1. 메인 / 로그인 / 회원가입 / 퀴즈 페이지 구현 <br> 2. 로그인 / 회원가입 / 퀴즈 페이지 API 연동 <br> 3. 웹캠 기능 구현 <br> 4. 웹캠과 Mediapipe 연결 <br> 5. 순위 페이지 구현 및 API 연동 <br> 6. 모달 컴포넌트 구현                                                                                                                                                                                                                         |
 | 박정훈 | 프론트엔드           | 1. navbar / about / 단어 학습 / 알파벳 학습 페이지 구현 <br> 2. about page section scrolling 구현 <br> 3. 단어 학습 / 알파벳 학습 페이지 API 연동 <br> 4. 타겟층을 고려한 알파벳 애니메이션 / 영상 flip 애니메이션 구현 <br> 5. framer-motion을 활용한 드래그, 애니메이션 <br> 6. 저작권 표시를 위한 footer 컴포넌트 구현 <br> 7. 실시간으로 인공지능과 통신하기 위한 socket.io 구현 <br> 8. 로딩 창, socket 데이터 통신 시 모달창 흐름 구현 |
-| 김동현 | 백엔드               | 1. 유저 DB 설계 및 API 개발<br>2. 학습 이력에 따른 포인트 반환하는 기능 추가<br>3. jwt token 설정<br>4. jest test file 작성<br>5. swagger 작성                                                                                                                                                                                                                                                                                               |
+| 김동현 | 백엔드               | 1. 유저 DB 설계 및 API 개발<br>2. 학습 이력에 따른 포인트 반환하는 기능 추가<br>3. jwt token 설정<br>4. jest test file 작성<br>5. swagger 작성<br> 6. 수화 영상 DB 생성 <br> 7. docker                                                                                                                                                                                                                                                                                          |
 | 김유진 | 백엔드/디스코드 관리 | 1. Discord 서버 관리<br>2. 수화 데이터를 가져오는 Hand DB 설계 및 API 구현<br>3. 퀴즈 점수 등록 및 상위 10등 반환해주는 Score DB 설계 및 API 구현<br>4. 퀴즈 문제로 낼 이미지를 반환하는 Quiz DB 설계 및 API 구현<br>5. nginx 및 docker 배포<br>6. 수화 영상 DB 생성 및 관리                                                                                                                                                                 |
 | 김채정 | 인공지능/팀장        | 1. LSTM 모델 프로토타입 테스트<br>2. 모델 학습 및 평가<br>3. Jupyter Notebook 코드를 클라이언트 사이드 모델로 변환<br>4. 서비스 성능 개선 위한 flask 코드 작성<br>5. 단어 카드 / 모달창 이미지 디자인<br>6. 핵심 버튼 별 청각장애인 수어 영상을 담은 tooltip 적용<br>7. 단어 검색창 컴포넌트 구현<br>8. 학습 페이지에 들어갈 입모양/단어 수화 영상 촬영                                                                                      |
 | 유혜선 | 인공지능/노션 관리   | 1. GPU VM/배포 VM 환경 설정 및 관리<br>2. 모델 학습 및 평가, 정확도 개선<br>3. LSTM 모델 프로토타입 테스트<br>4. 백 사이드 모델 구축(Flask, gunicorn)<br>5. 서버 부하 방지를 위한 백 사이드 모델 경량화<br>6. 서비스 성능 개선 위한 flask 코드 작성<br>7. Docker 및 Gunicorn 배포 관리<br>8. 실시간 프론트 통신을 위한 Socket.io 구현<br>9. 학습 페이지에 들어갈 알파벳 수화 영상 촬영                                                       |
